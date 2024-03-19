@@ -1,7 +1,11 @@
 import pool from '../../../../../db/pool.js';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-export const getOrders = async (req: Request, res: Response) => {
+export const getOrders = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   try {
     const query = 'SELECT * FROM orders';
     const { rows } = await pool.query(query);
@@ -9,13 +13,15 @@ export const getOrders = async (req: Request, res: Response) => {
       ? res.status(404).json({ message: 'No orders found' })
       : res.json(rows);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+    next(error);
   }
 };
 
-export const getOrder = async (req: Request, res: Response) => {
+export const getOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
   try {
     const query = 'SELECT * FROM orders WHERE order_id = $1';
@@ -24,13 +30,15 @@ export const getOrder = async (req: Request, res: Response) => {
       ? res.status(404).json({ message: 'Order not found' })
       : res.json(rows);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+    next(error);
   }
 };
 
-export const createOrder = async (req: Request, res: Response) => {
+export const createOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { user_id, product_id, total, address } = req.body;
   if (!user_id || !product_id || !total || !address) {
     return res.status(400).json({ message: 'Please fill in all fields' });
@@ -42,13 +50,15 @@ export const createOrder = async (req: Request, res: Response) => {
     const { rows } = await pool.query(query, values);
     res.json(rows);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+    next(error);
   }
 };
 
-export const updateOrder = async (req: Request, res: Response) => {
+export const updateOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
   const { user_id, product_id, total, address } = req.body;
   try {
@@ -58,13 +68,15 @@ export const updateOrder = async (req: Request, res: Response) => {
     const { rows } = await pool.query(query, values);
     res.json(rows);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+    next(error);
   }
 };
 
-export const deleteOrder = async (req: Request, res: Response) => {
+export const deleteOrder = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   const { id } = req.params;
   try {
     const query = 'DELETE FROM orders WHERE order_id = $1 RETURNING *';
@@ -73,8 +85,6 @@ export const deleteOrder = async (req: Request, res: Response) => {
       ? res.status(404).json({ message: 'Order not found' })
       : res.json(rows);
   } catch (error) {
-    if (error instanceof Error) {
-      res.status(500).json({ error: error.message });
-    }
+    next(error);
   }
 };
