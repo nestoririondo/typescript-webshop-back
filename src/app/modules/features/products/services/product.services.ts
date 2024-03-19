@@ -7,7 +7,7 @@ export const getProducts = async (
   next: NextFunction,
 ) => {
   try {
-    const query = 'SELECT * FROM products';
+    const query = 'SELECT * FROM Products';
     const { rows } = await pool.query(query);
     rows.length === 0
       ? res.status(404).json({ message: 'No products found' })
@@ -23,12 +23,13 @@ export const getProduct = async (
   next: NextFunction,
 ) => {
   const { id } = req.params;
+  console.log(id)
   try {
-    const query = 'SELECT * FROM products WHERE product_id = $1';
+    const query = 'SELECT * FROM Products WHERE id = $1';
     const { rows } = await pool.query(query, [id]);
     rows.length === 0
       ? res.status(404).json({ message: 'Product not found' })
-      : res.json(rows);
+      : res.json(rows[0]);
   } catch (error) {
     next(error);
   }
