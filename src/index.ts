@@ -1,7 +1,7 @@
 import express from 'express';
 import authRoutes from './app/modules/features/auth/routes/auth.routes';
-import productRoutes from './app/modules/features/products/controllers/product.routes';
-import orderRoutes from './app/modules/features/orders/controllers/orders.routes';
+import productRoutes from './app/modules/features/products/controllers/product.controllers';
+import orderRoutes from './app/modules/features/orders/controllers/orders.controllers';
 
 const app = express();
 const port = 3000;
