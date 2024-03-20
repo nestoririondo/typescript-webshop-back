@@ -20,11 +20,11 @@ export const register = async (data: ReqRegisterBody) => {
   const hashedPassword = await bcrypt
     .genSalt(10)
     .then((salt) => {
-      return bcrypt.hash(password, salt);
+      return bcrypt.hash(password, salt); // salt is key it's encoded with
     })
     .catch((err) => console.error(err.message));
 
-  const client = await pool.connect();
+  const client = await pool.connect(); // maybe not necessary?
 
   let createdUserResponse;
   try {
