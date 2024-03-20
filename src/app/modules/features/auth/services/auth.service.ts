@@ -20,16 +20,22 @@ export const register = async (data: ReqRegisterBody) => {
   const hashedPassword = await bcrypt
     .genSalt(10)
     .then((salt) => {
-      return bcrypt.hash(password, salt); // salt is key it's encoded with
+      return bcrypt.hash(password, salt);
     })
-    .catch((err) => console.error(err.message));
+    .catch((err) => {
+      throwDetailedError(
+        'Error hashing password',
+        STATUS_CODES.INTERNAL_SERVER_ERROR,
+      );
+    });
 
-  const client = await pool.connect(); // maybe not necessary?
+  const client = await pool.connect();
 
   let createdUserResponse;
   try {
-    createdUserResponse = await pool.query(
+    createdUserResponse = await client.query(
       `INSERT INTO users (name, email, password, profile_pic) VALUES ($1, $2, $3, $4) RETURNING *`,
+      // @ts-ignore
       [name, email, hashedPassword, profilePic],
     );
   } catch (error) {

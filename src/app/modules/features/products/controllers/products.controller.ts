@@ -1,5 +1,5 @@
 import { Router, Request, Response, NextFunction } from 'express';
-import { getProducts, getProduct } from '../services/product.service';
+import { getProducts, getProduct } from '../services/products.service';
 import { STATUS_CODES } from '../../../../../domain/constants';
 import { throwDetailedError } from '../../../../../utils/error';
 

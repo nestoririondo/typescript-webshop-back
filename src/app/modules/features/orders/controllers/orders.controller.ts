@@ -36,3 +36,5 @@ router.post('/', async (req: Request, res: Response, next: NextFunction) => {
     .status(STATUS_CODES.CREATED)
     .json({ message: 'Order created successfully', data: order });
 });
+
+export default router;
