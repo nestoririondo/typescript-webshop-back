@@ -27,5 +27,5 @@ export const createOrder = async (data: ReqOrderBody) => {
     'INSERT INTO orders (id, user_id, address, date, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
     [id, user_id, address, date, status],
   );
-  return rows;
+  return rows[0];
 };
