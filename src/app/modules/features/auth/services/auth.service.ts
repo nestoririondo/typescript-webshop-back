@@ -29,7 +29,7 @@ export const register = async (data: ReqRegisterBody) => {
   let createdUserResponse;
   try {
     createdUserResponse = await pool.query(
-      `INSERT INTO users (name, email, password, profile_pic) VALUES ($1, $2, $3, $4)`,
+      `INSERT INTO users (name, email, password, profile_pic) VALUES ($1, $2, $3, $4) RETURNING *`,
       [name, email, hashedPassword, profilePic],
     );
   } catch (error) {
