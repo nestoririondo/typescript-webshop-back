@@ -3,11 +3,13 @@ import authRoutes from './app/modules/features/auth/controllers/auth.controller'
 import errorHandler from './app/middleware/errorHandler';
 import orderRoutes from './app/modules/features/orders/controllers/orders.controller';
 import productRoutes from './app/modules/features/products/controllers/products.controller';
+import cors from 'cors';
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (_, res) => {
   res.send('Hello World!');
