@@ -14,10 +14,18 @@ export const throwDetailedError = (
   code?: number,
   domain?: ERROR_DOMAINS,
 ) => {
-  const error: DetailedError = new Error(message);
+  throw createDetailedError(message, code, domain);
+};
+
+export const createDetailedError = (
+  message: string,
+  code?: number,
+  domain?: ERROR_DOMAINS,
+) => {
+  const error = new Error(message) as DetailedError;
   error.code = code;
   error.domain = domain;
-  throw error;
+  return error;
 };
 
 export const throwDatabaseError = (message: string) => {

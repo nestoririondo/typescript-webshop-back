@@ -1,7 +1,10 @@
-import { Router, Request, Response } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { register, login } from '../services/auth.service';
 import { STATUS_CODES } from '../../../../../domain/constants';
-import { throwDetailedError } from '../../../../../utils/error';
+import {
+  createDetailedError,
+  throwDetailedError,
+} from '../../../../../utils/error';
 
 export type ReqRegisterBody = {
   name: string;
@@ -19,14 +22,20 @@ const router = Router();
 
 router.post(
   '/register',
-  async (req: Request<object, object, ReqRegisterBody>, res: Response) => {
+  async (
+    req: Request<object, object, ReqRegisterBody>,
+    res: Response,
+    next: NextFunction,
+  ) => {
     if (!req.body || !req.body.name || !req.body.email || !req.body.password)
-      return throwDetailedError(
-        'Name, email, and password are required',
-        STATUS_CODES.BAD_REQUEST,
+      next(
+        createDetailedError(
+          'Name, email, and password are required',
+          STATUS_CODES.BAD_REQUEST,
+        ),
       );
 
-    await register(req.body);
+    await register(req.body).catch(next);
 
     return res.status(STATUS_CODES.CREATED).json({
       message: 'User registered successfully',
