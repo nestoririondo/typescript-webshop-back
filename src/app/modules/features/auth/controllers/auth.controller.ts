@@ -23,7 +23,7 @@ const router = Router();
 router.post(
   '/register',
   async (
-    req: Request<object, object, ReqRegisterBody>,
+    req: Request<object, object, ReqRegisterBody>, // body is actually the third object inside Request (ctrl click), abstract type
     res: Response,
     next: NextFunction,
   ) => {
@@ -35,7 +35,7 @@ router.post(
         ),
       );
 
-    await register(req.body).catch(next);
+    await register(req.body).catch((err) => next(err)); // if register throws error, it will go to the next
 
     return res.status(STATUS_CODES.CREATED).json({
       message: 'User registered successfully',
