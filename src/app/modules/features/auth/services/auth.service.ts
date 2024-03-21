@@ -22,7 +22,7 @@ export const register = async (data: ReqRegisterBody) => {
     .then((salt) => {
       return bcrypt.hash(password, salt);
     })
-    .catch((err) => {
+    .catch(() => {
       throwDetailedError(
         'Error hashing password',
         STATUS_CODES.INTERNAL_SERVER_ERROR,
