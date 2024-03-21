@@ -5,7 +5,7 @@ import { throwDetailedError } from '../../../../../utils/error';
 import { v4 as uuidv4 } from 'uuid';
 
 export type ReqOrderBody = {
-  user_id: typeof uuidv4;
+  userId: typeof uuidv4;
   address: typeof uuidv4;
 };
 
@@ -25,8 +25,8 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  const { user_id, address } = req.body;
-  if (!user_id || !address)
+  const { userId, address } = req.body;
+  if (!userId || !address)
     return throwDetailedError(
       'Please fill in all fields',
       STATUS_CODES.BAD_REQUEST,

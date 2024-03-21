@@ -19,13 +19,10 @@ export const getOrder = async (id: string) => {
 };
 
 export const createOrder = async (data: ReqOrderBody) => {
-  const { user_id, address } = data;
-  const id = uuidv4();
-  const date = new Date();
-  const status = 'pending';
+  const { userId, address } = data;
   const { rows } = await pool.query<any>(
     'INSERT INTO orders (id, user_id, address, date, status) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-    [id, user_id, address, date, status],
+    [userId, address],
   );
   return rows[0];
 };
