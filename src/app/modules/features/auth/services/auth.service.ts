@@ -22,7 +22,7 @@ export const register = async (data: ReqRegisterBody) => {
     .then((salt) => {
       return bcrypt.hash(password, salt);
     })
-    .catch((err) => {
+    .catch(() => {
       throwDetailedError(
         'Error hashing password',
         STATUS_CODES.INTERNAL_SERVER_ERROR,
@@ -35,7 +35,8 @@ export const register = async (data: ReqRegisterBody) => {
   try {
     createdUserResponse = await client.query(
       `INSERT INTO users (name, email, password, profile_pic) VALUES ($1, $2, $3, $4) RETURNING *`,
-      // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       [name, email, hashedPassword, profilePic],
     );
   } catch (error) {
