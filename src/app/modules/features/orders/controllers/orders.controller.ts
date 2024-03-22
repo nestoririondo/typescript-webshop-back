@@ -7,6 +7,13 @@ import { v4 as uuidv4 } from 'uuid';
 export type ReqOrderBody = {
   userId: typeof uuidv4;
   address: typeof uuidv4;
+  products: OrderItem[];
+};
+
+type OrderItem = {
+  id: typeof uuidv4;
+  quantity: number;
+  price: number;
 };
 
 const router = Router();
@@ -25,8 +32,8 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, address } = req.body;
-  if (!userId || !address)
+  const { userId, address, products } = req.body;
+  if (!userId || !address || !products)
     return throwDetailedError(
       'Please fill in all fields',
       STATUS_CODES.BAD_REQUEST,

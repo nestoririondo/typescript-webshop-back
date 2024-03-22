@@ -2,6 +2,14 @@ import pool from '../../../../../db/pool.js';
 import { throwDetailedError } from '../../../../../utils/error.js';
 import { STATUS_CODES } from '../../../../../domain/constants.js';
 
+export type Product = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  stock: number;
+};
+
 export const getProducts = async () => {
   const { rows } = await pool.query('SELECT * FROM Products');
   return rows;

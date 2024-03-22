@@ -55,10 +55,14 @@ router.post(
 
     const user = await login(req.body);
 
-    return res.status(STATUS_CODES.OK).json({
-      message: 'User logged in successfully',
-      data: user,
+    const safeUser = Object.assign({
+      ...user,
+      password: undefined,
+      createdAt: user.created_at,
+      profilePic: user.profile_pic,
     });
+
+    return res.status(STATUS_CODES.OK).json(safeUser);
   },
 );
 
