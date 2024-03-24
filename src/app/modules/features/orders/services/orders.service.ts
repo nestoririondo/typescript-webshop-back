@@ -2,13 +2,14 @@ import pool from '../../../../../db/pool.js';
 import { ReqOrderBody } from '../controllers/orders.controller';
 import { throwDetailedError } from '../../../../../utils/error';
 import { STATUS_CODES } from '../../../../../domain/constants';
+import { v4 as uuidv4 } from 'uuid';
 
 type Order = {
-  id: string;
-  user_id: string;
+  id: typeof uuidv4;
+  user_id: typeof uuidv4;
   date: string;
   total: number;
-  address: string;
+  address: typeof uuidv4;
   status: string;
 };
 

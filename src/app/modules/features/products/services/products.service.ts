@@ -1,9 +1,10 @@
 import pool from '../../../../../db/pool.js';
 import { throwDetailedError } from '../../../../../utils/error.js';
 import { STATUS_CODES } from '../../../../../domain/constants.js';
+import { v4 as uuidv4 } from 'uuid';
 
 export type Product = {
-  id: string;
+  id: typeof uuidv4;
   name: string;
   description: string;
   price: number;
