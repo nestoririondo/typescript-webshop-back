@@ -12,14 +12,27 @@ export type Product = {
 };
 
 export const getProducts = async () => {
-  const { rows } = await pool.query('SELECT * FROM Products');
+  const { rows } = await pool.query(
+    `SELECT products.*, array_agg(images.url) as images
+    FROM products
+    JOIN images  
+    ON products.id = images.product_id
+    GROUP BY products.id`,
+  );
+
   return rows;
 };
 
 export const getProduct = async (id: string) => {
-  const { rows } = await pool.query('SELECT * FROM Products WHERE id = $1', [
-    id,
-  ]);
+  const { rows } = await pool.query(
+    `SELECT products.*, array_agg(images.url) as images
+    FROM products
+    JOIN images  
+    ON products.id = images.product_id
+    WHERE products.id = $1
+    GROUP BY products.id`,
+    [id],
+  );
   if (rows.length === 0) {
     throwDetailedError('Product not found', STATUS_CODES.NOT_FOUND);
   }
