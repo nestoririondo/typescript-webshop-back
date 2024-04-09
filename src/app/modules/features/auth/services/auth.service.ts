@@ -35,8 +35,6 @@ export const register = async (data: ReqRegisterBody) => {
   try {
     createdUserResponse = await client.query(
       `INSERT INTO users (name, email, password, profile_pic) VALUES ($1, $2, $3, $4) RETURNING *`,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-expect-error
       [name, email, hashedPassword, profilePic],
     );
   } catch (error) {
