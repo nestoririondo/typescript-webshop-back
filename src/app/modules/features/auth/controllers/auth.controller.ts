@@ -28,7 +28,7 @@ router.post(
     next: NextFunction,
   ) => {
     if (!req.body || !req.body.name || !req.body.email || !req.body.password)
-      next(
+      return next(
         createDetailedError(
           'Name, email, and password are required',
           STATUS_CODES.BAD_REQUEST,

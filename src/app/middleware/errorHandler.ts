@@ -10,8 +10,6 @@ const errorHandler = (
   res.status(err.code ?? 500).json({
     message: err.message,
   });
-
-  next();
 };
 
 export default errorHandler;

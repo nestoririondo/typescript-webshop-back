@@ -1,7 +1,10 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { getOrders, getOrder, createOrder } from '../services/orders.service';
 import { STATUS_CODES } from '../../../../../domain/constants';
-import { throwDetailedError } from '../../../../../utils/error';
+import {
+  throwDetailedError,
+  createDetailedError,
+} from '../../../../../utils/error';
 import { v4 as uuidv4 } from 'uuid';
 
 export type ReqOrderBody = {
@@ -34,9 +37,11 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
   const { userId, address, products } = req.body;
   if (!userId || !address || !products)
-    return throwDetailedError(
-      'Please fill in all fields',
-      STATUS_CODES.BAD_REQUEST,
+    return next(
+      createDetailedError(
+        'Please fill in all fields',
+        STATUS_CODES.BAD_REQUEST,
+      ),
     );
   const order = await createOrder(req.body).catch((err) => next(err));
   return res
