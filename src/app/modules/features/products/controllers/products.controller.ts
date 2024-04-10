@@ -5,13 +5,13 @@ import {
   addProduct,
   addProductImage,
 } from '../services/products.service';
-import { upload } from '../../../../middleware/upload';
-import { STATUS_CODES } from '../../../../../domain/constants';
+import { multerMemoryStorage } from '../../../../middleware/upload';
+import { uploadToCloudinary } from '../../../../../utils/cloudinary';
 import {
   throwDetailedError,
   createDetailedError,
 } from '../../../../../utils/error';
-import { uploadToCloudinary } from '../../../../middleware/upload';
+import { STATUS_CODES } from '../../../../../domain/constants';
 
 const router = Router();
 
@@ -30,7 +30,7 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 
 router.post(
   '/',
-  upload.single('file'),
+  multerMemoryStorage.single('file'), // Multer will look for a file in the 'file' field of the form data and add it to req.file
   async (req: Request, res: Response, next: NextFunction) => {
     const { name, description, price, stock } = req.body;
     if (!name || !description || !price || !stock) {
@@ -48,7 +48,17 @@ router.post(
       );
     }
 
-    const imageUrl = await uploadToCloudinary(req.file, 'products');
+    let imageUrl: string;
+    try {
+      imageUrl = await uploadToCloudinary(req.file, 'products');
+    } catch (err) {
+      return next(
+        createDetailedError(
+          'Error uploading image to cloudinary',
+          STATUS_CODES.INTERNAL_SERVER_ERROR,
+        ),
+      );
+    }
 
     const newProductData = await addProduct(req.body).catch((err) => next(err));
 
@@ -56,9 +66,11 @@ router.post(
       next(err),
     );
 
-    const product = await getProduct(newProductData.id).catch((err) => next(err));
+    const newProduct = await getProduct(newProductData.id).catch((err) =>
+      next(err),
+    );
 
-    return res.status(STATUS_CODES.CREATED).json(product);
+    return res.status(STATUS_CODES.CREATED).json(newProduct);
   },
 );
 
