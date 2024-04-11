@@ -53,7 +53,7 @@ export const login = async (data: ReqLoginBody) => {
 
   if (!rows?.length)
     throwDetailedError(
-      'Email or password is not correct, user not found',
+      'User not found',
       STATUS_CODES.NOT_FOUND,
     );
 
@@ -63,7 +63,7 @@ export const login = async (data: ReqLoginBody) => {
 
   if (!isPasswordValid)
     throwDetailedError(
-      'Email or password is not correct, password mismatch',
+      'Wrong password',
       STATUS_CODES.UNAUTHORIZED,
     );
 

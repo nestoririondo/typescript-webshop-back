@@ -46,14 +46,23 @@ router.post(
 // Define your routes here
 router.post(
   '/login',
-  async (req: Request<object, object, ReqLoginBody>, res) => {
+  async (
+    req: Request<object, object, ReqLoginBody>,
+    res,
+    next: NextFunction,
+  ) => {
     if (!req.body || !req.body.email || !req.body.password)
       return throwDetailedError(
         'Email and password are required',
         STATUS_CODES.BAD_REQUEST,
       );
 
-    const user = await login(req.body);
+    let user;
+    try {
+      user = await login(req.body);
+    } catch (error) {
+      return next(error);
+    }
 
     const safeUser = Object.assign({
       ...user,
