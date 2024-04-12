@@ -69,6 +69,7 @@ router.post(
       password: undefined,
       createdAt: user.created_at,
       profilePic: user.profile_pic,
+      isAdmin: user.is_admin,
     });
 
     return res.status(STATUS_CODES.OK).json(safeUser);
