@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export type ReqOrderBody = {
   userId: typeof uuidv4;
-  address: typeof uuidv4;
+  addressId: typeof uuidv4;
   products: OrderItem[];
 };
 
@@ -35,8 +35,8 @@ router.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
 });
 
 router.post('/', async (req: Request, res: Response, next: NextFunction) => {
-  const { userId, address, products } = req.body;
-  if (!userId || !address || !products)
+  const { userId, addressId, products } = req.body;
+  if (!userId || !addressId || !products)
     return next(
       createDetailedError(
         'Please fill in all fields',

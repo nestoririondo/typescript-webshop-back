@@ -28,14 +28,14 @@ export const getOrder = async (id: string) => {
 };
 
 export const createOrder = async (data: ReqOrderBody): Promise<Order> => {
-  const { userId, address, products } = data;
+  const { userId, addressId, products } = data;
   const total = products.reduce(
     (acc, product) => acc + product.price * product.quantity,
     0,
   );
   const { rows: orders } = await pool.query<Order>(
     'INSERT INTO orders (user_id, address_id, total) VALUES ($1, $2, $3) RETURNING *',
-    [userId, address, total],
+    [userId, addressId, total],
   );
   let query =
     'INSERT INTO order_items (order_id, product_id, quantity, price) VALUES ';
